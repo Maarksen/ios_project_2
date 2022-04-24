@@ -48,6 +48,7 @@ int *id_m = NULL;
 sem_t oxy;
 sem_t hydro;
 
+
 int main(int argc, char *argv[]){
 
     if(!(enough_arguments(argc))){
