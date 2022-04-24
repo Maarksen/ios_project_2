@@ -3,8 +3,9 @@
 #include <stdbool.h>
 
 #include <ctype.h>
-#include <unistd.h>
 #include <semaphore.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #define NUM_ARG 5 //number of intended arguments
 #define MAX_TIME 1000 //maximum number that time can be set to
@@ -15,11 +16,12 @@ bool check_arguments(char *argv);
 bool check_time(int time);
 
 //prototype of a function to put a process to sleep
-void rand_sleep(int time);
+void rand_sleep(unsigned time);
 
 //prototypes of functions creating molecules
 int oxygen(int id_o, unsigned wait_time);
 int hydrogen(int id_h, unsigned wait_time);
+void create_molecule(sem_t oxygen, sem_t hydrogen, unsigned num_hydrogen, unsigned num_oxygen);
 
 
 int main(int argc, char *argv[]){
@@ -41,6 +43,8 @@ int main(int argc, char *argv[]){
     sem_t oxy;
     sem_t hydro;
 
+    unsigned num_hydrogen;
+    unsigned num_oxygen;
 
     if(!(check_time(wait_time))){
         return 1;
@@ -56,7 +60,7 @@ int main(int argc, char *argv[]){
         if(pid == -1){
             printf(stderr,"error forking oxygen");
         }
-        else if(pid == 0){
+        if(pid == 0){
             oxygen(i+1, wait_time);
             exit(0);
         }
@@ -73,7 +77,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-return 0;
+    return 0;
 }
 
 //function that checks whether enough arguments were input
@@ -109,19 +113,13 @@ bool check_time(int time){
     return true;
 }
 
-//function creating individual molecules
-void create_molecule(sem_t oxygen, sem_t hydrogen){
-
-
-}
-
 //function creating oxygen
 int oxygen(int id_o, unsigned wait_time){
     printf("O %d: started\n", id_o);
     rand_sleep(wait_time);
     printf("O %d: going to queue\n", id_o);
-    return 0;
 
+    return 0;
 }
 
 //function creating oxygen
@@ -129,10 +127,20 @@ int hydrogen(int id_h, unsigned wait_time){
     printf("H %d: started\n", id_h);
     rand_sleep(wait_time);
     printf("H %d: going to queue\n", id_h);
+
     return 0;
 }
 
+//function creating individual molecules
+void create_molecule(sem_t oxy, sem_t hydro, unsigned num_hydrogen, unsigned num_oxygen){
+    sem_post(&(hydro));
+    sem_post(&(hydro));
+    num_hydrogen -= 2;
+    sem_post(&(oxy));
+    num_oxygen -= 1;
+}
+
 //function that puts a process to sleep
-void rand_sleep(int time){
+void rand_sleep(unsigned time){
     usleep((rand()%(time+1)));
 }
