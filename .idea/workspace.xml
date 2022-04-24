@@ -9,12 +9,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="started working on oxygen and hydrogen creation">
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="TODO create_molecule, oxygen, hydrogen">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ios_project2.dir/proj2.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ios_project2.dir/proj2.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/ios_project2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proj2.c" beforeDir="false" afterPath="$PROJECT_DIR$/proj2.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,19 +44,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "cmake.loaded.for.project": "true",
-    "last_opened_file_path": "/home/marek/ios_project2",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cmake.loaded.for.project&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marek/ios_project2&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
-    <configuration name="ios_project2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="5 5 100 500" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ios_project2" TARGET_NAME="ios_project2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ios_project2" RUN_TARGET_NAME="ios_project2">
+    <configuration name="ios_project2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10 10 100 100" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ios_project2" TARGET_NAME="ios_project2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ios_project2" RUN_TARGET_NAME="ios_project2">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -75,7 +76,9 @@
       <workItem from="1650283782880" duration="5258000" />
       <workItem from="1650300736532" duration="928000" />
       <workItem from="1650739980480" duration="295000" />
-      <workItem from="1650795411005" duration="13870000" />
+      <workItem from="1650795411005" duration="14193000" />
+      <workItem from="1650813067464" duration="1222000" />
+      <workItem from="1650828480902" duration="4636000" />
     </task>
     <task id="LOCAL-00001" summary="started working on oxygen and hydrogen creation">
       <created>1650808770056</created>
@@ -84,7 +87,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650808770056</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="TODO create_molecule, oxygen, hydrogen">
+      <created>1650812762813</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650812762813</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -103,6 +113,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="started working on oxygen and hydrogen creation" />
-    <option name="LAST_COMMIT_MESSAGE" value="started working on oxygen and hydrogen creation" />
+    <MESSAGE value="TODO create_molecule, oxygen, hydrogen" />
+    <option name="LAST_COMMIT_MESSAGE" value="TODO create_molecule, oxygen, hydrogen" />
   </component>
 </project>
