@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <stdbool.h>
+
+#include <ctype.h>
 #include <unistd.h>
 #include <semaphore.h>
 
@@ -16,30 +17,61 @@ bool check_time(int time);
 //prototype of a function to put a process to sleep
 void rand_sleep(int time);
 
+//prototypes of functions creating molecules
+int oxygen(int id_o, unsigned wait_time);
+int hydrogen(int id_h, unsigned wait_time);
+
 
 int main(int argc, char *argv[]){
-	
-if(!(enough_arguments(argc))){
-	return 1;
-}
-for(int i = 1; i < NUM_ARG; i++){
-    if(!(check_arguments(argv[i]))) {
+
+    if(!(enough_arguments(argc))){
         return 1;
     }
-}
+    for(int i = 1; i < NUM_ARG; i++){
+        if(!(check_arguments(argv[i]))) {
+            return 1;
+        }
+    }
 
-unsigned number_oxygen = atoi(argv[1]);
-unsigned number_hydrogen = atoi(argv[2]);
-unsigned wait_time = atoi(argv[3]);
-unsigned create_time = atoi(argv[4]);
+    unsigned number_oxygen = atoi(argv[1]);
+    unsigned number_hydrogen = atoi(argv[2]);
+    unsigned wait_time = atoi(argv[3]);
+    unsigned create_time = atoi(argv[4]);
 
-if(!(check_time(wait_time))){
-    return 1;
-}
-if(!(check_time(create_time))){
-    return 1;
-}
+    sem_t oxy;
+    sem_t hydro;
 
+
+    if(!(check_time(wait_time))){
+        return 1;
+    }
+    if(!(check_time(create_time))){
+        return 1;
+    }
+
+    pid_t pid;
+
+    for(int i = 0; i < number_oxygen; i++){
+        pid = fork();
+        if(pid == -1){
+            printf(stderr,"error forking oxygen");
+        }
+        else if(pid == 0){
+            oxygen(i+1, wait_time);
+            exit(0);
+        }
+    }
+
+    for(int i = 0; i < number_hydrogen; i++){
+        pid = fork();
+        if(pid == -1){
+            printf(stderr,"error forking hydrogen");
+        }
+        if(pid == 0){
+            hydrogen(i+1, wait_time);
+            exit(0);
+        }
+    }
 
 return 0;
 }
@@ -75,6 +107,29 @@ bool check_time(int time){
         return false;
     }
     return true;
+}
+
+//function creating individual molecules
+void create_molecule(sem_t oxygen, sem_t hydrogen){
+
+
+}
+
+//function creating oxygen
+int oxygen(int id_o, unsigned wait_time){
+    printf("O %d: started\n", id_o);
+    rand_sleep(wait_time);
+    printf("O %d: going to queue\n", id_o);
+    return 0;
+
+}
+
+//function creating oxygen
+int hydrogen(int id_h, unsigned wait_time){
+    printf("H %d: started\n", id_h);
+    rand_sleep(wait_time);
+    printf("H %d: going to queue\n", id_h);
+    return 0;
 }
 
 //function that puts a process to sleep

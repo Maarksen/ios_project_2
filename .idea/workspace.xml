@@ -9,7 +9,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="" />
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ios_project2.dir/proj2.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ios_project2.dir/proj2.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/ios_project2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj2.c" beforeDir="false" afterPath="$PROJECT_DIR$/proj2.c" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,7 +55,7 @@
   }
 }]]></component>
   <component name="RunManager">
-    <configuration name="ios_project2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="500 2 1000 2" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ios_project2" TARGET_NAME="ios_project2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ios_project2" RUN_TARGET_NAME="ios_project2">
+    <configuration name="ios_project2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10 8 100 500" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ios_project2" TARGET_NAME="ios_project2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ios_project2" RUN_TARGET_NAME="ios_project2">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -68,7 +75,7 @@
       <workItem from="1650283782880" duration="5258000" />
       <workItem from="1650300736532" duration="928000" />
       <workItem from="1650739980480" duration="295000" />
-      <workItem from="1650795411005" duration="3285000" />
+      <workItem from="1650795411005" duration="9873000" />
     </task>
     <servers />
   </component>
