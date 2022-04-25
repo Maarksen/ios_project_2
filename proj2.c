@@ -21,6 +21,29 @@
 #define MMAP(pointer){(pointer) = mmap(NULL, sizeof(*(pointer)), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);}
 #define UNMAP(pointer) {munmap((pointer), sizeof((pointer)));}
 
+//declarations of shared variables
+typedef struct shared {
+    int line;           //line counter
+    int num_oxygen;     //the overall number of oxygen
+    int num_hydrogen;   //the overall number of hydrogen
+
+    int curr_oxygen;    //current number of oxygen
+    int curr_hydrogen;  //current number of hydrogen
+
+    int id_m;           //the id of molecule to keep track
+
+    int oxy_idx;        //the oxygen we are working with
+    int hydro_idx;      //the hydrogen we are working with
+
+    //declarations of semaphores
+    sem_t oxy;
+    sem_t hydro;
+    sem_t mol;
+    sem_t mutex;
+    sem_t out;
+
+}shared_t;
+
 //prototypes of functions to verify arguments
 bool enough_arguments(int argc);
 bool check_arguments(char *argv);
@@ -30,23 +53,14 @@ bool check_time(int time);
 void rand_sleep(unsigned time);
 
 //prototypes of functions for initialization
-void init();
-void destruct();
+void init(shared_t *shared);
+void destruct(shared_t *shared);
 
 //prototypes of functions creating molecules
-void oxygen(int id_o, unsigned wait_time, unsigned create_time);
-void hydrogen(int id_h, unsigned wait_time, unsigned create_time);
-void create_molecule(unsigned create_time);
+void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time);
+void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time);
+void create_molecule(shared_t *shared);
 
-//declarations of shared variables
-int *line = NULL;
-int *num_hydrogen = NULL;
-int *num_oxygen = NULL;
-int *id_m = NULL;
-
-//declarations of semaphores
-sem_t oxy;
-sem_t hydro;
 
 int main(int argc, char *argv[]){
 
@@ -71,36 +85,36 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    init();
-
-    (*num_oxygen) = 0;
-    (*num_hydrogen) = 0;
+    //creating and initializing shared memory
+    shared_t *shared;
+    MMAP(shared)
+    init(shared);
 
     pid_t pid;
 
-    for(int i = 0; i < number_oxygen; i++){
+    for(unsigned i = 0; i < number_oxygen; i++){
         pid = fork();
         if(pid == -1){
             fprintf(stderr,"error forking oxygen");
         }
         if(pid == 0){
-            oxygen(i+1, wait_time, create_time);
+            oxygen(i+1, shared, wait_time, create_time);
             exit(0);
         }
     }
 
-    for(int i = 0; i < number_hydrogen; i++){
+    for(unsigned i = 0; i < number_hydrogen; i++){
         pid = fork();
         if(pid == -1){
             fprintf(stderr,"error forking hydrogen");
         }
         if(pid == 0){
-            hydrogen(i+1, wait_time, create_time);
+            hydrogen(i+1, shared, wait_time, create_time);
             exit(0);
         }
     }
 
-    destruct();
+    destruct(shared);
     return 0;
 }
 
@@ -138,59 +152,112 @@ bool check_time(int time){
 }
 
 //initializing shared memory and semaphores
-void init(){
-    MMAP(line);
-    MMAP(num_oxygen);
-    MMAP(num_hydrogen);
-    MMAP(id_m)
+void init(shared_t *shared){
+    shared->num_oxygen = 0;
+    shared->num_hydrogen = 0;
+    shared->oxy_idx = 0;
+    shared->hydro_idx = 0;
+
+    sem_init(&(shared->oxy), 1, 0);
+    sem_init(&(shared->hydro), 1, 0);
+    sem_init(&(shared->mol), 1, 1);
+    sem_init(&(shared->mol), 1, 1);
+    sem_init(&(shared->mutex), 1, 1);
+    sem_init(&(shared->out), 1, 1);
 }
 
 //destroying shared memory and semaphores
-void destruct(){
-    UNMAP(line);
-    UNMAP(num_oxygen);
-    UNMAP(num_hydrogen);
-    MMAP(id_m);
+void destruct(shared_t *shared){
+    sem_destroy(&(shared->oxy));
+    sem_destroy(&(shared->hydro));
+    sem_destroy(&(shared->mol));
+    sem_destroy(&(shared->mutex));
+    sem_destroy(&(shared->out));
+
 }
 
 //function creating oxygen
-void oxygen(int id_o, unsigned wait_time, unsigned create_time){
-    printf("%d: O %d: started\n", ++(*line),  id_o);
-    ++(*num_oxygen);
+void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time){
+    sem_wait(&(shared->out));
+    printf("%d: O %d: started\n", ++shared->line,  id_o);
+    sem_post(&(shared->out));
     rand_sleep(wait_time);
-    printf("%d: O %d: going to queue\n", ++(*line), id_o);
+    sem_wait(&(shared->out));
+    printf("%d: O %d: going to queue\n", ++shared->line, id_o);
+    sem_post(&(shared->out));
 
-    create_molecule(create_time);
+    sem_wait(&(shared->mutex));
+    ++shared->num_oxygen;
+
+    if(shared->num_oxygen >= 1 && shared->num_hydrogen >= 2) {
+        create_molecule(shared);
+    }
+    else{
+        sem_post(&(shared->mutex));
+    }
+
+    sem_wait(&(shared->oxy));
+
+    ++shared->id_m;
+    int ID = shared->id_m;
+    ++shared->hydro_idx;
+    int IDX = shared->hydro_idx;
+    sem_wait(&(shared->out));
+    printf("%d: H %d: Creating molecule %d\n",++shared->line, IDX, ID);
+    sem_post(&(shared->out));
+    rand_sleep(create_time);
+    sem_wait(&(shared->out));
+    printf("%d: H %d: Molecule %d created\n",++shared->line, IDX, ID);
+    sem_post(&(shared->out));
+
+
 }
 
 //function creating oxygen
-void hydrogen(int id_h, unsigned wait_time, unsigned create_time){
-    printf("%d: H %d: started\n", ++(*line), id_h);
-    ++(*num_hydrogen);
+void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time){
+    sem_wait(&(shared->out));
+    printf("%d: H %d: started\n", ++shared->line, id_h);
+    sem_post(&(shared->out));
     rand_sleep(wait_time);
-    printf("%d: H %d: going to queue\n", ++(*line), id_h);
+    sem_wait(&(shared->out));
+    printf("%d: H %d: going to queue\n", ++shared->line, id_h);
+    sem_post(&(shared->out));
 
-    create_molecule(create_time);
+    sem_wait(&(shared->mutex));
+    ++shared->num_hydrogen;
+
+    if(shared->num_oxygen >= 1 && shared->num_hydrogen >= 2) {
+        create_molecule(shared);
+    }
+    else{
+        sem_post(&(shared->mutex));
+    }
+    sem_wait(&(shared->hydro));
+
+    ++shared->id_m;
+    int ID = shared->id_m;
+    ++shared->oxy_idx;
+    int IDX = shared->oxy_idx;
+    sem_wait(&(shared->out));
+    printf("%d: O %d: Creating molecule %d\n",++shared->line, IDX, ID);
+    sem_post(&(shared->out));
+    rand_sleep(create_time);
+    sem_wait(&(shared->out));
+    printf("%d: O %d: Molecule %d created\n",++shared->line, IDX, ID);
+    sem_post(&(shared->out));
 }
 
 //function creating individual molecules
-void create_molecule(unsigned create_time){
-    if((*num_oxygen) >= 1 && (*num_hydrogen) >= 2){
-        ++(*id_m);
-        int index = (*id_m);
-        printf("%d: Creating molecule %d\n",++(*line), index);
-        (*num_oxygen) -= 1;
-        (*num_hydrogen) -= 2;
+void create_molecule( shared_t *shared){
 
-        rand_sleep(create_time);
-        printf("%d: Molecule %d created\n",++(*line), index);
-    }
+    sem_post(&(shared->hydro));
+    sem_post(&(shared->hydro));
+    shared->num_hydrogen -= 2;
+    shared->curr_hydrogen -= 2;
 
-    /*sem_post(&(hydro));
-    sem_post(&(hydro));
-    num_hydrogen -= 2;
-    sem_post(&(oxy));
-    num_oxygen -= 1;*/
+    sem_post(&(shared->oxy));
+    shared->num_oxygen -= 1;
+    shared->curr_oxygen -= 1;
 }
 
 //function that puts a process to sleep

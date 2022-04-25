@@ -9,7 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="TODO create_molecule, oxygen, hydrogen">
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="works without semaphores&#10;TODO semaphores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
@@ -51,12 +51,12 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;cmake.loaded.for.project&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/marek/ios_project2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marek/ivs_project_2/git/mathlib.py&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
 }</component>
   <component name="RunManager">
-    <configuration name="ios_project2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10 10 100 100" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ios_project2" TARGET_NAME="ios_project2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ios_project2" RUN_TARGET_NAME="ios_project2">
+    <configuration name="ios_project2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="8 8 100 100" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ios_project2" TARGET_NAME="ios_project2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ios_project2" RUN_TARGET_NAME="ios_project2">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -78,7 +78,11 @@
       <workItem from="1650739980480" duration="295000" />
       <workItem from="1650795411005" duration="14193000" />
       <workItem from="1650813067464" duration="1222000" />
-      <workItem from="1650828480902" duration="4636000" />
+      <workItem from="1650828480902" duration="4772000" />
+      <workItem from="1650878693363" duration="50000" />
+      <workItem from="1650884131340" duration="7599000" />
+      <workItem from="1650900090593" duration="6516000" />
+      <workItem from="1650910181155" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="started working on oxygen and hydrogen creation">
       <created>1650808770056</created>
@@ -94,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650812762813</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="works without semaphores&#10;TODO semaphores">
+      <created>1650833441651</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1650833441651</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -114,6 +125,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="started working on oxygen and hydrogen creation" />
     <MESSAGE value="TODO create_molecule, oxygen, hydrogen" />
-    <option name="LAST_COMMIT_MESSAGE" value="TODO create_molecule, oxygen, hydrogen" />
+    <MESSAGE value="works without semaphores&#10;TODO semaphores" />
+    <option name="LAST_COMMIT_MESSAGE" value="works without semaphores&#10;TODO semaphores" />
   </component>
 </project>
