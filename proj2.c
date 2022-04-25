@@ -62,6 +62,7 @@ void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_ti
 void create_molecule(shared_t *shared);
 
 
+
 int main(int argc, char *argv[]){
 
     if(!(enough_arguments(argc))){
