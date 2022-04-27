@@ -9,13 +9,15 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="works without semaphores&#10;TODO semaphores">
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="creating molecule not working">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ios_project2.dir/proj2.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ios_project2.dir/proj2.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/ios_project2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/ios_project2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj2" beforeDir="false" afterPath="$PROJECT_DIR$/proj2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proj2.c" beforeDir="false" afterPath="$PROJECT_DIR$/proj2.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +53,7 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;cmake.loaded.for.project&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/marek/ivs_project_2/git/mathlib.py&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marek/ios_project2&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
 }</component>
@@ -82,7 +84,11 @@
       <workItem from="1650878693363" duration="50000" />
       <workItem from="1650884131340" duration="7599000" />
       <workItem from="1650900090593" duration="6516000" />
-      <workItem from="1650910181155" duration="1000" />
+      <workItem from="1650910181155" duration="112000" />
+      <workItem from="1650992067789" duration="246000" />
+      <workItem from="1650992653680" duration="61000" />
+      <workItem from="1650993257844" duration="4188000" />
+      <workItem from="1651055702808" duration="8178000" />
     </task>
     <task id="LOCAL-00001" summary="started working on oxygen and hydrogen creation">
       <created>1650808770056</created>
@@ -105,7 +111,21 @@
       <option name="project" value="LOCAL" />
       <updated>1650833441651</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="creating molecule not working">
+      <created>1650910207662</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1650910207662</updated>
+    </task>
+    <task id="LOCAL-00005" summary="creating molecule not working">
+      <created>1650910251151</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1650910251151</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,6 +146,7 @@
     <MESSAGE value="started working on oxygen and hydrogen creation" />
     <MESSAGE value="TODO create_molecule, oxygen, hydrogen" />
     <MESSAGE value="works without semaphores&#10;TODO semaphores" />
-    <option name="LAST_COMMIT_MESSAGE" value="works without semaphores&#10;TODO semaphores" />
+    <MESSAGE value="creating molecule not working" />
+    <option name="LAST_COMMIT_MESSAGE" value="creating molecule not working" />
   </component>
 </project>
