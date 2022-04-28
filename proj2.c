@@ -195,7 +195,7 @@ void init(shared_t *shared){
 
     shared->file = fopen("proj2.out", "w");
 
-    sem_init(&(shared->oxy), 1, 1);
+    sem_init(&(shared->oxy), 1, 0);
     sem_init(&(shared->hydro), 1, 0);
     sem_init(&(shared->mol), 1, 0);
     sem_init(&(shared->mutex), 1, 1);
@@ -274,11 +274,13 @@ void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time
 
     sem_wait(&(shared->mutex));
 
+
+    sem_wait(&(shared->oxy));
+    sem_wait(&(shared->oxy));
+
     sem_post(&(shared->hydro));
     sem_post(&(shared->hydro));
 
-    //sem_wait(&(shared->oxy));
-    //sem_wait(&(shared->oxy));
 
     if(shared->max_mol < shared->id_m){
         print_mess(shared, '4', id_o, 'O');
@@ -337,9 +339,10 @@ void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_ti
 
     int idx_h = id_h;
 
+    sem_post(&(shared->oxy));
+
     sem_wait(&(shared->hydro));
 
-    //sem_post(&(shared->oxy));
 
     if (shared->max_mol < shared->id_m) {
         print_mess(shared, '4', id_h, 'H');
