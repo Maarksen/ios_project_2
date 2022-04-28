@@ -9,8 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="creating molecule not working">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="almost working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
@@ -88,7 +87,8 @@
       <workItem from="1650992067789" duration="246000" />
       <workItem from="1650992653680" duration="61000" />
       <workItem from="1650993257844" duration="4188000" />
-      <workItem from="1651055702808" duration="8178000" />
+      <workItem from="1651055702808" duration="8967000" />
+      <workItem from="1651147677420" duration="4800000" />
     </task>
     <task id="LOCAL-00001" summary="started working on oxygen and hydrogen creation">
       <created>1650808770056</created>
@@ -125,7 +125,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650910251151</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="almost working">
+      <created>1651075217412</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651075217412</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,6 +154,7 @@
     <MESSAGE value="TODO create_molecule, oxygen, hydrogen" />
     <MESSAGE value="works without semaphores&#10;TODO semaphores" />
     <MESSAGE value="creating molecule not working" />
-    <option name="LAST_COMMIT_MESSAGE" value="creating molecule not working" />
+    <MESSAGE value="almost working" />
+    <option name="LAST_COMMIT_MESSAGE" value="almost working" />
   </component>
 </project>

@@ -37,6 +37,8 @@ typedef struct shared {
     int hydro_idx;      //the hydrogen we are working with
     int hydro2_idx;     //the hydrogen we are working with
 
+    FILE* file;
+
     //declarations of semaphores
     sem_t oxy;
     sem_t hydro;
@@ -52,10 +54,14 @@ typedef struct shared {
 //prototypes of functions to verify arguments
 bool enough_arguments(int argc);
 bool check_arguments(char *argv);
+bool check_positive(int arg);
 bool check_time(int time);
 
 //prototype of a function to put a process to sleep
 void rand_sleep(int time);
+
+//prototype of function to print out a message
+void print_mess(shared_t *shared, int mess_id, int id_a, char type);
 
 //prototypes of functions for initialization
 void init(shared_t *shared);
@@ -65,7 +71,7 @@ void destruct(shared_t *shared);
 void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time);
 void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time);
 void create_molecule(shared_t *shared);
-int max_molecules(unsigned num_oxygen, unsigned num_hydrogen);
+int max_molecules(int num_oxygen, int num_hydrogen);
 
 
 
@@ -80,17 +86,26 @@ int main(int argc, char *argv[]){
         }
     }
 
-    unsigned number_oxygen = atoi(argv[1]);
-    unsigned number_hydrogen = atoi(argv[2]);
+    int number_oxygen = atoi(argv[1]);
+    int number_hydrogen = atoi(argv[2]);
     int wait_time = atoi(argv[3]);
     int create_time = atoi(argv[4]);
 
+    //checking hydrogen and oxygen
+    if(!(check_positive(number_oxygen))){
+        return 1;
+    }
+    if(!(check_positive(number_hydrogen))){
+        return 1;
+    }
+    //checking both times
     if(!(check_time(wait_time))){
         return 1;
     }
     if(!(check_time(create_time))){
         return 1;
     }
+
 
     //creating and initializing shared memory
     shared_t *shared;
@@ -102,8 +117,7 @@ int main(int argc, char *argv[]){
     pid_t pid;
 
 
-
-    for(unsigned i = 0; i < number_hydrogen; i++){
+    for(int i = 0; i < number_hydrogen; i++){
         pid = fork();
         if(pid == -1){
             fprintf(stderr,"error forking hydrogen");
@@ -114,7 +128,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    for(unsigned i = 0; i < number_oxygen; i++){
+    for(int i = 0; i < number_oxygen; i++){
         pid = fork();
         if(pid == -1){
             fprintf(stderr,"error forking oxygen");
@@ -153,6 +167,15 @@ bool check_arguments(char *argv) {
     return true;
 }
 
+//checking whether all arguments are positive
+bool check_positive(int arg){
+    if(arg <= 0){
+        fprintf(stderr, "invalid argument\n");
+        return false;
+    }
+    return true;
+}
+
 //function that checks whether the time was set correctly
 bool check_time(int time){
     if(!(time >= 0 && time <= MAX_TIME)){
@@ -169,6 +192,8 @@ void init(shared_t *shared){
     shared->oxy_idx = 0;
     shared->hydro_idx = 0;
     shared->id_m = 1;
+
+    shared->file = fopen("proj2.out", "w");
 
     sem_init(&(shared->oxy), 1, 1);
     sem_init(&(shared->hydro), 1, 0);
@@ -193,16 +218,58 @@ void destruct(shared_t *shared){
 
 }
 
+//function to printf messages
+void print_mess(shared_t *shared, int mess_id, int id_a, char type){
+    switch (mess_id){
+        case '0':
+            fprintf(shared->file, "%d: %c %d: started\n", ++shared->line, type,  id_a);
+            fflush(shared->file);
+            break;
+
+        case '1':
+            fprintf(shared->file, "%d: %c %d: going to queue\n", ++shared->line, type, id_a);
+            fflush(shared->file);
+            break;
+
+        case '2':
+            fprintf(shared->file, "%d: %c %d: creating molecule %d\n",++shared->line, type, id_a, shared->id_m);
+            fflush(shared->file);
+            break;
+
+        case '3':
+            fprintf(shared->file, "%d: %c %d: molecule %d created\n",++shared->line, type, id_a, shared->id_m);
+            fflush(shared->file);
+            break;
+
+        case '4':
+            if(type == 'O') {
+                fprintf(shared->file, "%d: %c %d: not enough H\n", ++shared->line, type, id_a);
+                fflush(shared->file);
+            }
+            else if(type == 'H'){
+                fprintf(shared->file, "%d: %c %d: not enough O or H\n", ++shared->line, type, id_a);
+                fflush(shared->file);
+            }
+            break;
+
+        default:
+            printf("hellllo\n");
+            break;
+    }
+}
+
 //function creating oxygen
 void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time){
     sem_wait(&(shared->out));
-    printf("%d: O %d: started\n", ++shared->line,  id_o);
+    print_mess(shared, '0', id_o, 'O');
+    //printf("%d: O %d: started\n", ++shared->line,  id_o);
     sem_post(&(shared->out));
 
     rand_sleep(wait_time);
 
     sem_wait(&(shared->out));
-    printf("%d: O %d: going to queue\n", ++shared->line, id_o);
+    print_mess(shared, '1', id_o, 'O');
+    //printf("%d: O %d: going to queue\n", ++shared->line, id_o);
     sem_post(&(shared->out));
 
     sem_wait(&(shared->mutex));
@@ -214,7 +281,7 @@ void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time
     //sem_wait(&(shared->oxy));
 
     if(shared->max_mol < shared->id_m){
-        printf("%d: O %d: not enough H\n", ++shared->line, id_o);
+        print_mess(shared, '4', id_o, 'O');
 
         sem_post(&shared->mutex);
         sem_post(&shared->mutex3);
@@ -224,7 +291,8 @@ void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time
 
 
     sem_wait(&(shared->out));
-    printf("%d: O %d: Creating molecule %d\n",++shared->line, id_o, shared->id_m);
+    print_mess(shared, '2', id_o, 'O');
+    //printf("%d: O %d: Creating molecule %d\n",++shared->line, id_o, shared->id_m);
     sem_post(&(shared->out));
 
     sem_wait(&(shared->mutex2));
@@ -237,7 +305,8 @@ void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time
     rand_sleep(create_time);
 
     sem_wait(&(shared->out));
-    printf("%d: O %d: Molecule %d created\n",++shared->line, id_o, shared->id_m);
+    print_mess(shared, '3', id_o, 'O');
+    //printf("%d: O %d: Molecule %d created\n",++shared->line, id_o, shared->id_m);
     sem_post(&(shared->out));
 
     sem_wait(&(shared->mol));
@@ -253,15 +322,17 @@ void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time
 }
 
 //function creating oxygen
-void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time){
+void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time) {
     sem_wait(&(shared->out));
-    printf("%d: H %d: started\n", ++shared->line, id_h);
+    print_mess(shared, '0', id_h, 'H');
+    //printf("%d: H %d: started\n", ++shared->line, id_h);
     sem_post(&(shared->out));
 
     rand_sleep(wait_time);
 
     sem_wait(&(shared->out));
-    printf("%d: H %d: going to queue\n", ++shared->line, id_h);
+    print_mess(shared, '1', id_h, 'H');
+    //printf("%d: H %d: going to queue\n", ++shared->line, id_h);
     sem_post(&(shared->out));
 
     int idx_h = id_h;
@@ -270,15 +341,17 @@ void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_ti
 
     //sem_post(&(shared->oxy));
 
-    if(shared->max_mol < shared->id_m){
-        printf("%d: H %d: not enough H or O\n", ++shared->line, id_h);
+    if (shared->max_mol < shared->id_m) {
+        print_mess(shared, '4', id_h, 'H');
+        //printf("%d: H %d: not enough H or O\n", ++shared->line, id_h);
         sem_post(&shared->mutex2);
         exit(EXIT_SUCCESS);
     }
 
 
     sem_wait(&(shared->out));
-    printf("%d: H %d: Creating molecule %d\n",++shared->line, idx_h, shared->id_m);
+    print_mess(shared, '2', idx_h, 'H');
+    //printf("%d: H %d: Creating molecule %d\n", ++shared->line, idx_h, shared->id_m);
     sem_post(&(shared->out));
 
     sem_post(&(shared->mutex2));
@@ -288,14 +361,16 @@ void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_ti
     rand_sleep(create_time);
 
     sem_wait(&(shared->out));
-    printf("%d: H %d: Molecule %d created\n",++shared->line, idx_h, shared->id_m);
+    print_mess(shared, '3', idx_h, 'H');
+    //printf("%d: H %d: Molecule %d created\n", ++shared->line, idx_h, shared->id_m);
     sem_post(&(shared->out));
 
     sem_post(&(shared->mol));
     sem_wait(&(shared->mutex4));
+
 }
 
-int max_molecules(unsigned num_oxygen, unsigned num_hydrogen){
+int max_molecules(int num_oxygen, int num_hydrogen){
     int max_mol;
     if(num_oxygen > num_hydrogen/2){
         max_mol = num_hydrogen/2;
