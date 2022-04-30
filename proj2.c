@@ -22,15 +22,8 @@ typedef struct shared {
     int num_oxygen;     //the overall number of oxygen
     int num_hydrogen;   //the overall number of hydrogen
 
-    int curr_oxygen;    //current number of oxygen
-    int curr_hydrogen;  //current number of hydrogen
-
     int id_m;           //the id of molecule to keep track
     int max_mol;        //maximum number of molecules
-
-    int oxy_idx;        //the oxygen we are working with
-    int hydro_idx;      //the hydrogen we are working with
-    int hydro2_idx;     //the hydrogen we are working with
     int max_atoms;      //all atoms that should go into queue
     int queue;          //number of atoms already in queue
 
@@ -67,40 +60,42 @@ void init(shared_t *shared);
 void destruct(shared_t *shared);
 
 //prototypes of functions creating molecules
-void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time);
-void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time);
+void oxygen(int id_o, shared_t *shared, int wait_time, int create_time);
+void hydrogen(int id_h, shared_t *shared, int wait_time, int create_time);
 int max_molecules(int num_oxygen, int num_hydrogen);
 
 
 
 int main(int argc, char *argv[]){
 
+    //checking whether there is enough arguments
     if(!(enough_arguments(argc))){
         return 1;
     }
+    //checking if all the arguments are only numbers
     for(int i = 1; i < NUM_ARG; i++){
         if(!(check_arguments(argv[i]))) {
             return 1;
         }
     }
 
-    int number_oxygen = atoi(argv[1]);
-    int number_hydrogen = atoi(argv[2]);
-    int wait_time = atoi(argv[3]);
-    int create_time = atoi(argv[4]);
+    int NO = atoi(argv[1]);     //number of oxygen
+    int NH = atoi(argv[2]);     //number of hydrogen
+    int TI = atoi(argv[3]);     //wait_time - max time needed to wait before an atom goes to queue
+    int TB = atoi(argv[4]);     //create_time - max time needed to wait before molecule is created
 
     //checking hydrogen and oxygen
-    if(!(check_positive(number_oxygen))){
+    if(!(check_positive(NO))){
         return 1;
     }
-    if(!(check_positive(number_hydrogen))){
+    if(!(check_positive(NH))){
         return 1;
     }
     //checking both times
-    if(!(check_time(wait_time))){
+    if(!(check_time(TI))){
         return 1;
     }
-    if(!(check_time(create_time))){
+    if(!(check_time(TB))){
         return 1;
     }
 
@@ -110,34 +105,34 @@ int main(int argc, char *argv[]){
     MMAP(shared)
     init(shared);
 
-    shared->max_mol = max_molecules(number_oxygen, number_hydrogen);
-    shared->max_atoms = number_oxygen + number_hydrogen;
+    shared->max_mol = max_molecules(NO, NH);
+    shared->max_atoms = NO + NH;
 
     pid_t pid;
-
-
-    for(int i = 0; i < number_hydrogen; i++){
+    //the hydrogen forking process
+    for(int i = 0; i < NH; i++){
         pid = fork();
-        if(pid == -1){
-            fprintf(stderr,"error forking hydrogen");
+        if(pid == -1){      //if the pid is negative the forking process failed
+            fprintf(stderr,"error forking hydrogen\n");
         }
-        if(pid == 0){
-            hydrogen(i+1, shared, wait_time, create_time);
+        if(pid == 0){       //pid == 0 means that we are on the child process
+            hydrogen(i+1, shared, TI, TB);
+            exit(0);
+        }
+    }
+    //the oxygen forking process
+    for(int i = 0; i < NO; i++){
+        pid = fork();
+        if(pid == -1){      //if the pid is negative the forking process failed
+            fprintf(stderr,"error forking oxygen\n");
+        }
+        if(pid == 0){       //pid == 0 means that we are on the child process
+            oxygen(i+1, shared, TI, TB);
             exit(0);
         }
     }
 
-    for(int i = 0; i < number_oxygen; i++){
-        pid = fork();
-        if(pid == -1){
-            fprintf(stderr,"error forking oxygen");
-        }
-        if(pid == 0){
-            oxygen(i+1, shared, wait_time, create_time);
-            exit(0);
-        }
-    }
-
+    //deactivating and destroying the memory
     destruct(shared);
     UNMAP(shared)
     return 0;
@@ -187,15 +182,16 @@ bool check_time(int time){
 
 //initializing shared memory and semaphores
 void init(shared_t *shared){
+    //initializing variables
     shared->num_oxygen = 0;
     shared->num_hydrogen = 0;
-    shared->oxy_idx = 0;
-    shared->hydro_idx = 0;
     shared->id_m = 1;
     shared->queue = 0;
 
+    //specifying the file
     shared->file = fopen("proj2.out", "w");
 
+    //initializing the semaphores
     sem_init(&(shared->oxy), 1, 0);
     sem_init(&(shared->hydro), 1, 0);
     sem_init(&(shared->mol), 1, 0);
@@ -210,6 +206,7 @@ void init(shared_t *shared){
 
 //destroying shared memory and semaphores
 void destruct(shared_t *shared){
+    //destroying the semaphores
     sem_destroy(&(shared->oxy));
     sem_destroy(&(shared->hydro));
     sem_destroy(&(shared->mol));
@@ -220,7 +217,6 @@ void destruct(shared_t *shared){
     sem_destroy(&(shared->hydro_mutex));
     sem_destroy(&(shared->sem_queue));
     sem_destroy(&(shared->out));
-
 }
 
 //function to printf messages
@@ -234,9 +230,9 @@ void print_mess(shared_t *shared, int mess_id, int id_a, char type){
         case '1':
             fprintf(shared->file, "%d: %c %d: going to queue\n", ++shared->line, type, id_a);
             shared->queue++;
-            if(shared->queue == shared->max_atoms){
+            if(shared->queue == shared->max_atoms){             //if all atoms are already in queue
                 for(int i = 0; i < shared->max_atoms; i++){
-                    sem_post(&(shared->sem_queue));
+                    sem_post(&(shared->sem_queue));         //posts semaphore for every atom so all could pass
                 }
             }
             fflush(shared->file);
@@ -270,79 +266,91 @@ void print_mess(shared_t *shared, int mess_id, int id_a, char type){
 }
 
 //function creating oxygen
-void oxygen(int id_o, shared_t *shared, unsigned wait_time, unsigned create_time){
+void oxygen(int id_o, shared_t *shared, int wait_time, int create_time){
     sem_wait(&(shared->out));
-    print_mess(shared, '0', id_o, 'O');
+    print_mess(shared, '0', id_o, 'O');     //prints out oxygen started
     sem_post(&(shared->out));
 
+    //waits random time from 0 to TI
     rand_sleep(wait_time);
 
     sem_wait(&(shared->out));
-    print_mess(shared, '1', id_o, 'O');
+    print_mess(shared, '1', id_o, 'O');     //prints out oxygen in queue
     sem_post(&(shared->out));
 
+    //waits, only one oxygen process can print molecule at a time
     sem_wait(&(shared->mutex));
 
+    //if all molecules are already made
     if(shared->max_mol < shared->id_m){
         if(shared->queue != shared->max_atoms){
-            sem_wait(&(shared->sem_queue));
+            sem_wait(&(shared->sem_queue));    //waits until all atoms are in queue
         }
-        print_mess(shared, '4', id_o, 'O');
+        print_mess(shared, '4', id_o, 'O');     //prints not enough H
 
+        //lets another oxygen pass
         sem_post(&shared->mutex);
+        //lets two hydrogens pass
         sem_post(&shared->mutex3);
         sem_post(&shared->mutex3);
         exit(EXIT_SUCCESS);
     }
 
-    sem_wait(&(shared->oxy));
-    sem_wait(&(shared->oxy));
-
+    //waits for two hydrogens
+    sem_wait(&(shared->oxy));       //semaphores make sure that
+    sem_wait(&(shared->oxy));       //one atom can not print creating before all atoms are in queue
+    //lets two hydrogens pass
     sem_post(&(shared->hydro));
     sem_post(&(shared->hydro));
 
 
     sem_wait(&(shared->out));
-    print_mess(shared, '2', id_o, 'O');
+    print_mess(shared, '2', id_o, 'O');     //prints molecule creating
     sem_post(&(shared->out));
 
-    sem_wait(&(shared->mutex2));
-    sem_wait(&(shared->mutex2));
-
+    //waits for two hydrogens
+    sem_wait(&(shared->mutex2));    //semaphores make sure that
+    sem_wait(&(shared->mutex2));    //one atom can not print created before all finish creating
+    //lets two hydrogens pass
     sem_post(&(shared->mutex3));
     sem_post(&(shared->mutex3));
 
-
+    //waits random time from 0 to TB
     rand_sleep(create_time);
 
     sem_wait(&(shared->out));
-    print_mess(shared, '3', id_o, 'O');
+    print_mess(shared, '3', id_o, 'O');     //prints molecule created
     sem_post(&(shared->out));
 
+    //semaphores make sure that all molecule processes are finished
     sem_wait(&(shared->mol));
     sem_wait(&(shared->mol));
 
     sem_post(&(shared->mutex4));
     sem_post(&(shared->mutex4));
 
-    ++shared->id_m;
+    ++shared->id_m;     //increments number of molecules
 
+    //lets another oxygen process go
     sem_post(&(shared->mutex));
     exit(EXIT_SUCCESS);
 }
 
-//function creating oxygen
-void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_time) {
+//function creating hydrogen
+void hydrogen(int id_h, shared_t *shared,int wait_time, int create_time) {
     sem_wait(&(shared->out));
-    print_mess(shared, '0', id_h, 'H');
+    print_mess(shared, '0', id_h, 'H');     //prints out hydrogen started
     sem_post(&(shared->out));
 
+    //waits random time from 0 to TI
     rand_sleep(wait_time);
 
     sem_wait(&(shared->out));
-    print_mess(shared, '1', id_h, 'H');
+    print_mess(shared, '1', id_h, 'H');     //prints out hydrogen in queue
     sem_post(&(shared->out));
 
+    //saves the id of hydrogen into a variable
+    //to ensure that the hydrogen id stays the same for the whole process
     int idx_h = id_h;
 
     sem_wait(&(shared->hydro_mutex));
@@ -350,40 +358,46 @@ void hydrogen(int id_h, shared_t *shared, unsigned wait_time, unsigned create_ti
     //if all the available molecules have been created we can no longer create any
     if (shared->max_mol < shared->id_m) {
         if(shared->queue != shared->max_atoms){
-            sem_wait(&(shared->sem_queue));
+            sem_wait(&(shared->sem_queue));     //we wait for all the atoms to go to queue before printing
         }
-        print_mess(shared, '4', id_h, 'H');
+        print_mess(shared, '4', id_h, 'H');     // //prints not enough O or H
         sem_post(&shared->mutex2);
         sem_post(&(shared->hydro_mutex));
         exit(EXIT_SUCCESS);
     }
-
+    //lets oxygen pass
     sem_post(&(shared->oxy));
-
+    //waits for oxygen to lets this process continue
     sem_wait(&(shared->hydro));
 
     sem_wait(&(shared->out));
-    print_mess(shared, '2', idx_h, 'H');
+    print_mess(shared, '2', idx_h, 'H');      //prints molecule creating
     sem_post(&(shared->out));
 
+    //lets oxygen continue
     sem_post(&(shared->mutex2));
-
+    //waits for oxygen to let this process go
     sem_wait(&(shared->mutex3));
 
+    //waits random time from 0 to TB
     rand_sleep(create_time);
 
     sem_wait(&(shared->out));
-    print_mess(shared, '3', idx_h, 'H');
+    print_mess(shared, '3', idx_h, 'H');      //prints molecule created
     sem_post(&(shared->out));
 
+    //semaphores make sure that all processes from one molecule
+    //finish in the same time
     sem_post(&(shared->mol));
     sem_wait(&(shared->mutex4));
 
+    //lets another hydrogen process go
     sem_post(&(shared->hydro_mutex));
 
     exit(EXIT_SUCCESS);
 }
 
+//calculates the maximum number of atoms
 int max_molecules(int num_oxygen, int num_hydrogen){
     int max_mol;
     if(num_oxygen > num_hydrogen/2){

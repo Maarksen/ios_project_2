@@ -9,10 +9,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="TODO not enough O or H&#10;(toto uz funguje poggeryyyy)todo skor sa vypise creating moelcule ako idu vsetko do queue">
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="finished(hopefully) | TODO comments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proj2" beforeDir="false" afterPath="$PROJECT_DIR$/proj2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proj2.c" beforeDir="false" afterPath="$PROJECT_DIR$/proj2.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +84,7 @@
       <workItem from="1651055702808" duration="8967000" />
       <workItem from="1651147677420" duration="8430000" />
       <workItem from="1651161346471" duration="173000" />
-      <workItem from="1651336791016" duration="8294000" />
+      <workItem from="1651336791016" duration="14705000" />
     </task>
     <task id="LOCAL-00001" summary="started working on oxygen and hydrogen creation">
       <created>1650808770056</created>
@@ -144,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651154276334</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="finished(hopefully) | TODO comments">
+      <created>1651349175261</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1651349175261</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -169,6 +174,7 @@
     <MESSAGE value="almost working" />
     <MESSAGE value="todo not enough O or H&#10;todo skor sa vypise creating moelcule ako idu vsetko do queue" />
     <MESSAGE value="TODO not enough O or H&#10;(toto uz funguje poggeryyyy)todo skor sa vypise creating moelcule ako idu vsetko do queue" />
-    <option name="LAST_COMMIT_MESSAGE" value="TODO not enough O or H&#10;(toto uz funguje poggeryyyy)todo skor sa vypise creating moelcule ako idu vsetko do queue" />
+    <MESSAGE value="finished(hopefully) | TODO comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished(hopefully) | TODO comments" />
   </component>
 </project>
