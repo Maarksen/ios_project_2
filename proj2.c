@@ -6,6 +6,7 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/mman.h>
 
 
 #define NUM_ARG 5       //number of intended arguments
