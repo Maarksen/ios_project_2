@@ -7,6 +7,12 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <sys/shm.h>
+#include <sys/ipc.h>
+#include <fcntl.h>
 
 
 #define NUM_ARG 5       //number of intended arguments
