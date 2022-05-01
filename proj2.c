@@ -114,10 +114,11 @@ int main(int argc, char *argv[]){
         pid = fork();
         if(pid == -1){      //if the pid is negative the forking process failed
             fprintf(stderr,"error forking hydrogen\n");
+            exit(EXIT_FAILURE);
         }
         if(pid == 0){       //pid == 0 means that we are on the child process
             hydrogen(i+1, shared, TI, TB);
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
     }
     //the oxygen forking process
@@ -125,17 +126,18 @@ int main(int argc, char *argv[]){
         pid = fork();
         if(pid == -1){      //if the pid is negative the forking process failed
             fprintf(stderr,"error forking oxygen\n");
+            exit(EXIT_FAILURE);
         }
         if(pid == 0){       //pid == 0 means that we are on the child process
             oxygen(i+1, shared, TI, TB);
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
     }
 
     //deactivating and destroying the memory
     destruct(shared);
     UNMAP(shared)
-    return 0;
+    exit(EXIT_SUCCESS);
 }
 
 //function that checks whether enough arguments were input
