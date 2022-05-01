@@ -15,11 +15,6 @@
 #include <fcntl.h>
 
 
-
-
-
-
-
 #define NUM_ARG 5       //number of intended arguments
 #define MAX_TIME 1000   //maximum number that time can be set to
 
