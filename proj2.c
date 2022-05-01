@@ -217,6 +217,9 @@ void destruct(shared_t *shared){
     sem_destroy(&(shared->hydro_mutex));
     sem_destroy(&(shared->sem_queue));
     sem_destroy(&(shared->out));
+
+    //closing the file
+    fclose(shared->file);
 }
 
 //function to printf messages

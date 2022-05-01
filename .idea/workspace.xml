@@ -9,9 +9,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="finished(hopefully) | TODO comments">
+    <list default="true" id="cbde2e0f-f648-4bff-b8fe-ee6c09a6c7aa" name="Changes" comment="finished">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proj2.c" beforeDir="false" afterPath="$PROJECT_DIR$/proj2.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +83,8 @@
       <workItem from="1651055702808" duration="8967000" />
       <workItem from="1651147677420" duration="8430000" />
       <workItem from="1651161346471" duration="173000" />
-      <workItem from="1651336791016" duration="14705000" />
+      <workItem from="1651336791016" duration="14835000" />
+      <workItem from="1651398051867" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="started working on oxygen and hydrogen creation">
       <created>1650808770056</created>
@@ -149,7 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651349175261</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="finished">
+      <created>1651358388848</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1651358388848</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +182,7 @@
     <MESSAGE value="todo not enough O or H&#10;todo skor sa vypise creating moelcule ako idu vsetko do queue" />
     <MESSAGE value="TODO not enough O or H&#10;(toto uz funguje poggeryyyy)todo skor sa vypise creating moelcule ako idu vsetko do queue" />
     <MESSAGE value="finished(hopefully) | TODO comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="finished(hopefully) | TODO comments" />
+    <MESSAGE value="finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished" />
   </component>
 </project>
